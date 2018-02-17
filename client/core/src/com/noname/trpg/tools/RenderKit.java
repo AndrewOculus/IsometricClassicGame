@@ -1,11 +1,12 @@
 package com.noname.trpg.tools;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.noname.trpg.objects.StuffType;
 import com.noname.trpg.objects.TreeType;
 
 public class RenderKit {
 
-	private static Texture tree1 , tree2 , tree3, tree4, tree5;
+	private static Texture tree1 , tree2 , tree3, tree4, tree5, aid, bow;
 	
 	public static Texture getTree(TreeType type)
 	{
@@ -30,6 +31,21 @@ public class RenderKit {
 			if(tree5==null)
 			tree5 = new Texture("tree_5.png");
 			return tree5;
+			
+		}
+		return null;
+	}
+	public static Texture getStuff(StuffType type)
+	{
+		switch (type) {
+		case medkit:
+			if(aid==null)
+			aid = new Texture("aid.png");
+			return aid;
+		case bow:
+			if(bow==null)
+			bow = new Texture("bow.png");
+			return bow;
 			
 		}
 		return null;

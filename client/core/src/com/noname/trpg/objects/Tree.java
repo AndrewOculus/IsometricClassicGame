@@ -23,7 +23,7 @@ public class Tree extends Actor implements Comparable<Actor>  {
 		treeSprite.setOrigin(-treeSprite.getWidth(),-treeSprite.getWidth()*scale);
 		setX(x);
 		setY(y);
-		treeSprite.setPosition(x, y);
+		treeSprite.setPosition(getX(), getY());
 	}
 	
 	@Override
