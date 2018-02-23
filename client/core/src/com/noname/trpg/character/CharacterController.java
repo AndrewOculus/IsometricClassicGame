@@ -41,7 +41,7 @@ public class CharacterController {
 	}
 	public void update(float dt)
 	{		
-		if(Gdx.input.isTouched())
+		if(Gdx.input.isButtonPressed(1))
 		{
 			followPoint = new Vector3(Gdx.input.getX() ,Gdx.input.getY(), 0);
 			followPoint = camera.unproject(followPoint);

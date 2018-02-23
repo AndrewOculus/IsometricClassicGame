@@ -121,9 +121,7 @@ public class DragAndDropTest extends Game {
 
 			public void drop (Source source, Payload payload, float x, float y, int pointer) {
 				window.addActor(source.getActor());
-				//source.getActor().setBounds(50, 50, 50, 50);
 				source.getActor().setPosition(getActor().getX() , getActor().getY());
-				source.getActor().setZIndex(99);
 				render();
 
 			}
@@ -145,8 +143,6 @@ public class DragAndDropTest extends Game {
 				render();
 				source.getActor().setBounds(50, 50, 50, 50);
 				source.getActor().setPosition(getActor().getX() , getActor().getY());
-				source.getActor().setZIndex(99);
-
 				System.out.println(getActor().getX());
 			}
 		});

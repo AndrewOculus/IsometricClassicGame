@@ -111,7 +111,7 @@ public class Character extends Actor implements Comparable<Actor> {
 
 	@Override
 	public int compareTo(Actor o) {
-		return -(int) getY() + (int)o.getY();
+		return (int) (-getY() + o.getY());
 	}
 	
 	

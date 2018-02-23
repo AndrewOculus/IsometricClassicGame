@@ -4,18 +4,30 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 
 public class Thing extends Actor {
 
 	private ThingsType type;
 	private Sprite sprite;
+	private DragAndDrop dragAndDrop;
 	
-	public Thing(float x , float y , ThingsType type) {
+	public Thing(float x , float y , ThingsType type,DragAndDrop dragAndDrop) {
 		setX(x);
 		setY(y);
 		this.type = type;
 		sprite =new Sprite( new Texture("aid.png"));
-
+		
+		dragAndDrop.addSource(new Source(this) {
+			public Payload dragStart (InputEvent event, float x, float y, int pointer) {
+				Payload payload = new Payload();
+				return payload;
+			}
+		});
 	}
 	public Thing() {
 		setX(100);
@@ -24,9 +36,7 @@ public class Thing extends Actor {
 		sprite =new Sprite( new Texture("aid.png"));
 		setWidth(sprite.getWidth());
 		setHeight(sprite.getHeight());
-		//sprite.setOrigin(-sprite.getWidth()/2, -sprite.getHeight()/2);
-		//sprite.setCenter(-sprite.getWidth()/2, -sprite.getHeight()/2);
-		//sprite.setOriginBasedPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
+
 	}
 	@Override
 	public void act(float delta) {

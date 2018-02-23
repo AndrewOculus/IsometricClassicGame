@@ -12,6 +12,6 @@ public class DesktopLauncher {
 		config.width = 640;
 		config.height = 480;
 		config.title = "Classic RPG Game";
-		new LwjglApplication(new DragAndDropTest(), config);
+		new LwjglApplication(new PointOfEntry(), config);
 	}
 }
