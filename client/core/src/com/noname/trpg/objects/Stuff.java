@@ -12,15 +12,16 @@ import com.noname.trpg.tools.RenderKit;
 public class Stuff extends Actor implements Comparable<Actor> {
 
 	private Sprite stuffSprite;
-	private 	float scale = 0.1f;
+	private float size;
+	private final float sceneSize = 20 , invSize = 50;
 	
 	public Stuff(float x , float y , StuffType type, DragAndDrop dragAndDrop) {
 		super.setX(x);
 		super.setY(y);
-		
+		setSceneSize();
 		stuffSprite = new Sprite(RenderKit.getStuff(type));
-		stuffSprite.setScale(scale);
-		stuffSprite.setOrigin(-stuffSprite.getWidth()*scale/2,-stuffSprite.getWidth()*scale/2);
+		stuffSprite.setSize(size, size);
+		stuffSprite.setOrigin(-size/2,-size/2);
 		stuffSprite.setPosition(x, y);
 
 		dragAndDrop.addSource(new Source(this) {
@@ -29,25 +30,32 @@ public class Stuff extends Actor implements Comparable<Actor> {
 				return payload;
 			}
 		});
+		
 	}	
 	@Override
 	public void act(float delta) {
 		super.act(delta);
-		stuffSprite.setPosition(getX() + stuffSprite.getWidth()*scale/2, getY() + stuffSprite.getHeight()*scale/2);
+		stuffSprite.setPosition(getX(), getY() );
+		stuffSprite.setSize(size, size);
+
 	}
 	
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		stuffSprite.draw(batch);
-		setBounds(getX(), getY(), stuffSprite.getWidth()*scale, stuffSprite.getHeight()*scale);
+		setBounds(getX(), getY(), size, size);
 	}
 
 	@Override
 	public int compareTo(Actor o) {
 		return (int) (-getY() + o.getY());
 	}
-	public void setScale(float sclae)
+	public void setSceneSize()
 	{
-		stuffSprite.setScale(scale);
+		this.size = sceneSize;
+	}
+	public void setInvSize()
+	{
+		this.size = invSize;
 	}
 }

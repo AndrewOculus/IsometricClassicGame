@@ -46,7 +46,7 @@ public class RenderKit {
 			skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		return skin;
 	}
-	public BitmapFont getBitmapFont()
+	public static BitmapFont getBitmapFont()
 	{
 		if(bitmapFont==null)
 			bitmapFont = new BitmapFont();
