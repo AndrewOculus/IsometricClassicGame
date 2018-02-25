@@ -6,18 +6,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 
 public class CharacterController {
 	private Vector2 input;
@@ -41,7 +31,7 @@ public class CharacterController {
 	}
 	public void update(float dt)
 	{		
-		if(Gdx.input.isButtonPressed(1))
+		if(Gdx.input.isButtonPressed(1)&&Gdx.input.justTouched())
 		{
 			followPoint = new Vector3(Gdx.input.getX() ,Gdx.input.getY(), 0);
 			followPoint = camera.unproject(followPoint);

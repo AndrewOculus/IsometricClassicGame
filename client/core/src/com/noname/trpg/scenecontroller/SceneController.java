@@ -8,11 +8,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -35,6 +35,7 @@ public class SceneController implements InputProcessor {
 	private Actor character;
 	private Stage stage;
 	private DragAndDrop dragAndDrop;
+	private boolean isShooter = false;
 	
 	public class StatsTarget extends Target
 	{
@@ -102,6 +103,11 @@ public class SceneController implements InputProcessor {
 					if(((Stuff)item).getType() == StuffType.bow)
 					{
 						System.out.println("bow man");
+						isShooter = true;
+					}
+					else
+					{
+						isShooter = false;
 					}
 				}
 			}
@@ -463,7 +469,49 @@ public class SceneController implements InputProcessor {
 		}		
 		if(keycode == Keys.A)
 		{
+			for (Actor item : inventory.getChildren() ) {
+				if(item.getClass().getName().equals(Stuff.class.getName()))
+				{
+					if(((Stuff)item).getType()==StuffType.arrow)
+					{
+						stage.addActor(((Stuff)item));
+						item.setPosition(character.getX(), character.getY());
+						((Stuff)item).setSceneSize();
+						
+						float dx = Gdx.graphics.getWidth()/2 - Gdx.input.getX();
+						float dy = Gdx.graphics.getHeight()/2 - Gdx.graphics.getHeight() + Gdx.input.getY();
 
+						final Vector2 forw = new Vector2(dx,dy);
+						forw.nor();
+						
+						Action act = new Action() {
+							final float time = 1.5f, speed = 3;
+							float timer = 0;
+							
+							@Override
+							public boolean act(float delta) {
+
+								timer+=delta;
+								
+								if(time > timer)
+								{
+									getActor().setX(getActor().getX() - forw.x*speed);
+									getActor().setY(getActor().getY() - forw.y*speed);
+
+									return false;
+
+								}
+								return true;
+
+							}
+						};
+						item.addAction(act);
+						break;
+
+					}
+					
+				}
+			}
 		}	
 		return false;
 	}
