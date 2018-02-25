@@ -95,6 +95,17 @@ public class SceneController implements InputProcessor {
 			{
 				localPos.set(character.getX() - getX(),character.getY() - getY());
 			}
+			
+			for (Actor item : craftWindow.getChildren()) {
+				if(item.getClass().getName().equals(Stuff.class.getName()))
+				{
+					if(((Stuff)item).getType() == StuffType.bow)
+					{
+						System.out.println("bow man");
+					}
+				}
+			}
+			
 		}
 		@Override
 		public int compareTo(Actor o) {
@@ -134,8 +145,7 @@ public class SceneController implements InputProcessor {
 	public class CraftWindow extends Window implements Comparable<Actor>
 	{
 		private Vector2 localPos = new Vector2();
-		private TextButton axeButton;
-		private TextButton bowButton;
+		private TextButton axeButton, bowButton , arrowButton;
 		private Window craftWindow;
 		
 		public CraftWindow(String title, Skin skin) {
@@ -218,6 +228,42 @@ public class SceneController implements InputProcessor {
 				}
 			});
 			this.addActor(bowButton);
+			
+			arrowButton = new TextButton("arrow", skin);
+			arrowButton.setPosition(25, 90);
+			arrowButton.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					super.clicked(event, x, y);
+					Stuff isStone = null ;
+					Stuff isStick = null ;
+
+					for (Actor item : craftWindow.getChildren()) {
+
+						if(item.getClass().getName().equals(Stuff.class.getName()))
+						{
+							if(((Stuff)item).getType()==StuffType.stone)
+							{
+								isStone = (Stuff)item;
+							}
+							if(((Stuff)item).getType()==StuffType.stick)
+							{
+								isStick = (Stuff)item;
+							}
+ 						}
+						
+						if(isStick!=null&&isStone!=null)
+						{
+							isStick.remove();
+							isStone.remove();
+							Stuff arrow = new Stuff(character.getX(), character.getY(), StuffType.arrow, dragAndDrop);
+							stage.addActor(arrow);
+						}
+						
+					}
+				}
+			});
+			this.addActor(arrowButton);
 		}
 
 		@Override
@@ -414,7 +460,12 @@ public class SceneController implements InputProcessor {
 		if(keycode == Keys.C)
 		{
 			stats.setVisible(!stats.isVisible());
-		}		return false;
+		}		
+		if(keycode == Keys.A)
+		{
+
+		}	
+		return false;
 	}
 
 	@Override

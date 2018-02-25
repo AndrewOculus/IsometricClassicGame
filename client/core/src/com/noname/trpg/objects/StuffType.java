@@ -3,7 +3,7 @@ package com.noname.trpg.objects;
 import java.util.Random;
 
 public enum StuffType {
- medkit , bow, stone, stick, axe,rope;
+ medkit , bow, stone, stick, axe,rope,arrow;
  
  public static StuffType randomStuff()  {
      Random random = new Random();
