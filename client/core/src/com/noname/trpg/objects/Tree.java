@@ -9,21 +9,16 @@ import com.noname.trpg.tools.RenderKit;
 public class Tree extends Actor implements Comparable<Actor>  {
 
 	private Sprite treeSprite;
-	private TreeType type;
+	private 	float scale = 2f;
 	
 	public Tree(float x , float y , TreeType type) {
-		
-		this.type = type;
-				
-		Texture texture = RenderKit.getTree(TreeType.randomTree());
-		
-		treeSprite = new Sprite (texture);
-		float scale = 1f;
+						
+		treeSprite = new Sprite (RenderKit.getTree(type));
 		treeSprite.setScale(scale);
-		treeSprite.setOrigin(-treeSprite.getWidth(),-treeSprite.getWidth()*scale);
+		treeSprite.setOrigin(-treeSprite.getWidth()*scale/2,0);
 		setX(x);
 		setY(y);
-		treeSprite.setPosition(getX(), getY());
+		treeSprite.setPosition((int)getX(), (int)getY());
 	}
 	
 	@Override

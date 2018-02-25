@@ -8,37 +8,34 @@ import com.noname.trpg.tools.RenderKit;
 public class Stuff extends Actor implements Comparable<Actor> {
 
 	private Sprite stuffSprite;
+	private 	float scale = 0.1f;
+
 	
 	public Stuff(float x , float y , StuffType type) {
 		super.setX(x);
 		super.setY(y);
 		
 		stuffSprite = new Sprite(RenderKit.getStuff(type));
-		float scale = 0.3f;
 		stuffSprite.setScale(scale);
-		stuffSprite.setOrigin(-stuffSprite.getWidth()*scale,-stuffSprite.getWidth()*scale);
+		stuffSprite.setOrigin(-stuffSprite.getWidth()*scale/2,-stuffSprite.getWidth()*scale/2);
 		stuffSprite.setPosition(x, y);
-		
-		super.setWidth(stuffSprite.getWidth());
-		super.setHeight(stuffSprite.getHeight());
+
 	}	
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+		stuffSprite.setPosition(getX() + stuffSprite.getWidth()*scale/2, getY() + stuffSprite.getHeight()*scale/2);
 	}
 	
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		stuffSprite.draw(batch);
-		//System.out.println(getX() + " " + getY());
+		setBounds(getX(), getY(), stuffSprite.getWidth()*scale, stuffSprite.getHeight()*scale);
 	}
-	@Override
-	public Actor hit(float x, float y, boolean touchable) {
-		return x >= 0 && x < super.getWidth() && y >= 0 && y < super.getHeight() ? this : null;
-	}
+
 	@Override
 	public int compareTo(Actor o) {
-		return -(int) getY() + (int)o.getY();
+		return (-(int) getY() + (int)o.getY());
 	}
 
 }

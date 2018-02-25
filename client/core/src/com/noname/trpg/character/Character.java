@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Character extends Actor implements Comparable<Actor> {
@@ -61,10 +63,14 @@ public class Character extends Actor implements Comparable<Actor> {
 		}
 
 		characterController.update(dt);
-		setX(getX() +characterController.getInput().x);
-		setY(getY() +characterController.getInput().y);
 
-		getStage().getCamera().position.set(getX(), getY(),0);
+		Vector2 pos = new Vector2(getX() , getY());
+		pos.lerp(new Vector2( getX()+characterController.getInput().x ,getY()+characterController.getInput().y), 0.5f);
+		
+		setX(pos.x);
+		setY(pos.y);
+		
+		getStage().getCamera().position.set( pos , 0 );
 
 	}
 	
@@ -76,10 +82,7 @@ public class Character extends Actor implements Comparable<Actor> {
 		//bitmapFont.draw(batch ,model.getState().getHealth()+" hp" , model.getTransform().getX()-20 , model.getTransform().getY() + 95);
 	
 	}
-	@Override
-	public Actor hit(float x, float y, boolean touchable) {
-		return x >= 0 && x <super.getWidth() && y >= 0 && y < super.getHeight() ? this : null;
-	}
+
 	private void charAnimationInit()
 	{
 
