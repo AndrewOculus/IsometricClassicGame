@@ -469,6 +469,7 @@ public class SceneController implements InputProcessor {
 		}		
 		if(keycode == Keys.A)
 		{
+			if(isShooter)
 			for (Actor item : inventory.getChildren() ) {
 				if(item.getClass().getName().equals(Stuff.class.getName()))
 				{

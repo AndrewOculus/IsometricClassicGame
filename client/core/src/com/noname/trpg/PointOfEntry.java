@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.noname.trpg.animals.Bear;
 import com.noname.trpg.character.Character;
 import com.noname.trpg.map.IsometricTiledMapRendererAdapter;
 import com.noname.trpg.objects.Stuff;
@@ -56,7 +57,13 @@ public class PointOfEntry extends Game {
 		stage.addActor(new Stuff(2310, 0 ,StuffType.randomStuff(), dragAndDrop));
 		stage.addActor(new Stuff(2310, 0 ,StuffType.randomStuff(), dragAndDrop));
 
-
+		stage.addActor(new Bear(0,54243 ));
+		stage.addActor(new Bear(2320,765 ));
+		stage.addActor(new Bear(2320,-2322 ));
+		stage.addActor(new Bear(0,0 ));
+		stage.addActor(new Bear(5656,231 ));
+		stage.addActor(new Bear(34,142 ));
+		stage.addActor(new Bear(324,34 ));
 		sceneController = new SceneController(stage,skin,character, dragAndDrop);
 	}
 	
@@ -65,18 +72,21 @@ public class PointOfEntry extends Game {
 	public void render () {
 		Gdx.gl.glClearColor(1 , 1 , 1 , 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
+
+		
 		stage.act(Gdx.graphics.getDeltaTime());
 	    isoTMX.render();
 	    isoTMX.setView((OrthographicCamera)stage.getCamera());
 		stage.draw();
-	    stage.getActors().sort();
+		stage.getActors().sort();
 
 	}
 	
 	@Override
 	public void dispose () {
 		isoTMX.dispose();
-		//stage.dispose();
 	}
 	
 	@Override

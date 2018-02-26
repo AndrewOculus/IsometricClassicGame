@@ -27,5 +27,4 @@ public class Tree extends Actor implements Comparable<Actor>  {
 	public int compareTo(Actor o) {
 		return (int) (-getY() + o.getY());
 	}
-
 }
