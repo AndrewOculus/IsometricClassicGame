@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
@@ -30,18 +31,25 @@ public class DragAndDropTest extends Game {
 		Skin skin1 = new Skin(Gdx.files.internal("data/uiskin.json"));
 
 		skin.add("default", new LabelStyle(new BitmapFont(), Color.WHITE));
-		skin.add("badlogic", new Texture("cell_.png"));
+		skin.add("cell", new Texture("cell_.png"));
 		skin.add("bow", new Texture("bow.png"));
-
+		skin.add("drop",new Texture("drop_.png"));
+		
 		window = new Window("Inventary",skin1);
-		window.setSize(400, 400);
+		window.setSize(250, 200);
 		window.setResizable(true);
+		window.setKeepWithinStage(true);
+		window.setClip(true);
 		window.setColor(1, 1, 1, 0.8f);
 
 		
 		Image sourceImage = new Image(skin, "bow");
-		sourceImage.setBounds(100, 100, 100, 100);
+		sourceImage.setBounds(50, 50, 50, 50);
 		stage.addActor(sourceImage);
+		
+		Image sourceImage1 = new Image(skin, "bow");
+		sourceImage1.setBounds(100, 150, 50, 50);
+		stage.addActor(sourceImage1);
 		
 		Image[][] cells = new Image[4][4];	
 		
@@ -49,12 +57,14 @@ public class DragAndDropTest extends Game {
 		{
 			for(int j = 0 ; j < 4 ; j++)
 			{
-				cells[i][j] = new Image(skin, "badlogic");
-				cells[i][j].setBounds(i*100, j*100, 100, 100);
+				cells[i][j] = new Image(skin, "cell");
+				cells[i][j].setBounds(i*50, j*50, 50, 50);
 				window.addActor(cells[i][j]);
 			}
 		}
-
+		Image drop = new Image(skin,"drop");
+		drop.setBounds(200, 50, 50, 100);
+		window.addActor(drop);
 		stage.addActor(window);
 		
 		DragAndDrop dragAndDrop = new DragAndDrop();
@@ -76,6 +86,26 @@ public class DragAndDropTest extends Game {
 				return payload;
 			}
 		});
+		
+		dragAndDrop.addSource(new Source(sourceImage1) {
+			public Payload dragStart (InputEvent event, float x, float y, int pointer) {
+				Payload payload = new Payload();
+				payload.setObject("Some payload!");
+
+				payload.setDragActor(new Label("Some payload!", skin));
+
+				Label validLabel = new Label("Some payload!", skin);
+				validLabel.setColor(0, 1, 0, 1);
+				payload.setValidDragActor(validLabel);
+
+				Label invalidLabel = new Label("Some payload!", skin);
+				invalidLabel.setColor(1, 0, 0, 1);
+				payload.setInvalidDragActor(invalidLabel);
+
+				return payload;
+			}
+		});
+		
 		for(int i = 0 ; i < 4 ; i++)
 		for(int j = 0 ; j < 4 ; j++)
 		dragAndDrop.addTarget(new Target(cells[i][j]) {
@@ -83,15 +113,37 @@ public class DragAndDropTest extends Game {
 				getActor().setColor(Color.GREEN);
 				return true;
 			}
-
 			public void reset (Source source, Payload payload) {
 				getActor().setColor(Color.WHITE);
+				//stage.addActor(source.getActor());
+				
 			}
 
 			public void drop (Source source, Payload payload, float x, float y, int pointer) {
-				window.add(source.getActor());
+				window.addActor(source.getActor());
+				//source.getActor().setBounds(50, 50, 50, 50);
+				source.getActor().setPosition(getActor().getX() , getActor().getY());
+				source.getActor().setZIndex(99);
 				render();
-				source.getActor().setScale(0.5f);
+
+			}
+		});
+		
+		dragAndDrop.addTarget(new Target(drop) {
+			public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
+				getActor().setColor(Color.RED);
+				return true;
+			}
+			public void reset (Source source, Payload payload) {
+				getActor().setColor(Color.WHITE);
+				//stage.addActor(source.getActor());
+				
+			}
+
+			public void drop (Source source, Payload payload, float x, float y, int pointer) {
+				stage.addActor(source.getActor());
+				render();
+				source.getActor().setBounds(50, 50, 50, 50);
 				source.getActor().setPosition(getActor().getX() , getActor().getY());
 				source.getActor().setZIndex(99);
 
