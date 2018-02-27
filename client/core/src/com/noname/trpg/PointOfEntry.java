@@ -53,7 +53,6 @@ public class PointOfEntry extends Game {
 		stage.addActor(new Stuff(2310, 0 ,StuffType.randomStuff(), dragAndDrop));
 
 		sceneController = new SceneController(stage,skin,character, dragAndDrop);
-		Gdx.input.setInputProcessor(stage);
 	}
 	
 

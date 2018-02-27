@@ -13,7 +13,6 @@ public class Stuff extends Actor implements Comparable<Actor> {
 
 	private Sprite stuffSprite;
 	private 	float scale = 0.1f;
-
 	
 	public Stuff(float x , float y , StuffType type, DragAndDrop dragAndDrop) {
 		super.setX(x);
@@ -35,8 +34,6 @@ public class Stuff extends Actor implements Comparable<Actor> {
 	public void act(float delta) {
 		super.act(delta);
 		stuffSprite.setPosition(getX() + stuffSprite.getWidth()*scale/2, getY() + stuffSprite.getHeight()*scale/2);
-		this.setZIndex((int) this.getY()+10000);
-
 	}
 	
 	@Override
@@ -49,5 +46,8 @@ public class Stuff extends Actor implements Comparable<Actor> {
 	public int compareTo(Actor o) {
 		return (int) (-getY() + o.getY());
 	}
-
+	public void setScale(float sclae)
+	{
+		stuffSprite.setScale(scale);
+	}
 }
