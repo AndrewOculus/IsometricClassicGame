@@ -11,6 +11,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 640;
 		config.height = 480;
+		config.resizable = false;
 		config.title = "Classic RPG Game";
 		new LwjglApplication(new PointOfEntry(), config);
 	}

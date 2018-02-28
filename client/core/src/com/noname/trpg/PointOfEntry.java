@@ -39,6 +39,7 @@ public class PointOfEntry extends Game {
 
 	    Random random = new Random();
 	    Actor character = new Character(stage.getCamera() , 2300 , 0);
+	    
 	    stage.addActor(character);
 	    for(int i = -20 ; i < 20 ; i++)
 	    	for(int j = -20 ; j < 20 ; j++)

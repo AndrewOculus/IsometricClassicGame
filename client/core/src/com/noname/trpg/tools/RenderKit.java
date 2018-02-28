@@ -10,7 +10,7 @@ import com.noname.trpg.objects.TreeType;
 
 public class RenderKit {
 
-	private static Sprite tree1 , tree2 , tree3, tree4, tree5, aid, bow;
+	private static Sprite tree1 , tree2 , tree3, tree4, tree5, aid, bow, stone , stick , axe ;
 	private static Skin skin;
 	private static BitmapFont bitmapFont;
 	
@@ -63,7 +63,18 @@ public class RenderKit {
 			if(bow==null)
 				bow = new Sprite(new Texture("bow.png"));
 			return bow;
-			
+		case stone:
+			if(stone == null )
+				stone = new Sprite(new Texture("stone_.png"));
+			return stone;
+		case stick:
+			if(stick == null )
+				stick = new Sprite(new Texture("stick_.png"));
+			return stick;
+		case axe:
+			if(axe == null )
+				axe = new Sprite(new Texture("axe_.png"));
+			return axe;
 		}
 		return null;
 	}

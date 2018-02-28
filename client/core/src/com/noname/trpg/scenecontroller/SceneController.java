@@ -13,38 +13,122 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.noname.trpg.objects.Stuff;
+import com.noname.trpg.objects.StuffType;
 
 public class SceneController implements InputProcessor {
 
-	private InventoryWindow window;
+	private InventoryWindow inventory;
+	private CraftWindow craft;
 	private Actor character;
 	private Stage stage;
+	private DragAndDrop dragAndDrop;
 	
-	public class InventarySource extends Source {
-
-		public InventarySource(Actor actor) {
+	public class CraftTarget extends Target
+	{
+		public CraftTarget(Actor actor) {
 			super(actor);
 		}
 
 		@Override
-		public Payload dragStart(InputEvent event, float x, float y, int pointer) {
-			return null;
+		public void reset(Source source, Payload payload) {
+			super.reset(source, payload);
+			getActor().setColor(Color.WHITE);
+
 		}
 		@Override
-		public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
-
-			super.dragStop(event, x, y, pointer, payload, target);
-
+		public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
+			getActor().setColor(Color.GREEN);
+			return true;
 		}
-	
+
+		@Override
+		public void drop(Source source, Payload payload, float x, float y, int pointer) {
+			craft.addActor(source.getActor());
+			source.getActor().setPosition(getActor().getX() , getActor().getY());
+			((Stuff)source.getActor()).setInvSize();
+			stage.draw();
+		}
+		
 	};
+	
+	public class CraftWindow extends Window implements Comparable<Actor>
+	{
+		private Vector2 localPos = new Vector2();
+		private TextButton axeButton;
+		private Window craftWindow;
+		
+		public CraftWindow(String title, Skin skin) {
+			super(title, skin);
+			craftWindow = this;
+			this.setSize(100, 140);
+			this.setKeepWithinStage(true);
+			this.setClip(true);
+			this.setColor(1, 1, 1, 0.8f);
+			
+			axeButton = new TextButton("axe",skin);
+			axeButton.setPosition(25, 60);
+			axeButton.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					super.clicked(event, x, y);
+					Stuff isStone = null ;
+					Stuff isStick = null ;
+
+					for (Actor item : craftWindow.getChildren()) {
+
+						if(item.getClass().getName().equals(Stuff.class.getName()))
+						{
+							if(((Stuff)item).getType()==StuffType.stone)
+							{
+								isStone = (Stuff)item;
+							}
+							if(((Stuff)item).getType()==StuffType.stick)
+							{
+								isStick = (Stuff)item;
+							}
+ 						}
+						
+						if(isStick!=null&&isStone!=null)
+						{
+							isStick.remove();
+							isStone.remove();
+							Stuff axe = new Stuff(character.getX(), character.getY(), StuffType.axe, dragAndDrop);
+							stage.addActor(axe);
+						}
+						
+					}
+				}
+			});
+			this.addActor(axeButton);
+		}
+
+		@Override
+		public void act(float delta) {
+			super.act(delta);
+			if(!isDragging())
+			{
+				setPosition(character.getX() - localPos.x, character.getY() - localPos.y);
+			}
+			else
+			{
+				localPos.set(character.getX() - getX(),character.getY() - getY());
+			}
+		}
+		@Override
+		public int compareTo(Actor o) {
+			//allways top
+			return (int) (-getY() + o.getY() + 10000);
+		}
+	}
 	
 	public class InventaryTarget extends Target
 	{
@@ -66,7 +150,7 @@ public class SceneController implements InputProcessor {
 
 		@Override
 		public void drop(Source source, Payload payload, float x, float y, int pointer) {
-			window.addActor(source.getActor());
+			inventory.addActor(source.getActor());
 			source.getActor().setPosition(getActor().getX() , getActor().getY());
 			
 			((Stuff)source.getActor()).setInvSize();
@@ -103,8 +187,11 @@ public class SceneController implements InputProcessor {
 		
 		public InventoryWindow(String title, Skin skin) {
 			super(title, skin);
-	
-			}
+			this.setSize(250, 220);
+			this.setKeepWithinStage(true);
+			this.setClip(true);
+			this.setColor(1, 1, 1, 0.8f);
+		}
 		@Override
 		public void act(float delta) {
 			super.act(delta);
@@ -119,6 +206,7 @@ public class SceneController implements InputProcessor {
 		}
 		@Override
 		public int compareTo(Actor o) {
+			//allways top
 			return (int) (-getY() + o.getY() + 10000);
 		}
 		
@@ -126,6 +214,7 @@ public class SceneController implements InputProcessor {
 	
 	public SceneController( final Stage stage , Skin skin1 , final Actor character,DragAndDrop dragAndDrop)
 	{
+		this.dragAndDrop = dragAndDrop;
 		this.stage = stage;
 		Skin skin = new Skin();
 		this.character = character;
@@ -134,11 +223,8 @@ public class SceneController implements InputProcessor {
 		skin.add("cell", new Texture("cell_.png"));
 		skin.add("drop", new Texture("drop_.png"));
 		
-		window = new InventoryWindow("Inventory",skin1);
-		window.setSize(250, 220);
-		window.setKeepWithinStage(true);
-		window.setClip(true);
-		window.setColor(1, 1, 1, 0.8f);
+		inventory = new InventoryWindow("Inventory",skin1);
+		craft = new CraftWindow("craft", skin1);
 
 		Image[][] cells = new Image[4][4];
 		InventaryTarget[][] targets = new InventaryTarget[4][4];
@@ -149,23 +235,39 @@ public class SceneController implements InputProcessor {
 			{
 				cells[i][j] = new Image(skin, "cell");
 				cells[i][j].setBounds(i*50, j*50, 50, 50);
-				window.addActor(cells[i][j]);
+				inventory.addActor(cells[i][j]);
 			}
 		}
+		
+		Image[] craftCells = new Image[2];
+		
+		for(int i = 0 ; i < 2 ; i++)
+		{
+			craftCells[i] = new Image(skin, "cell");
+			craftCells[i].setBounds(i*50, 0, 50, 50);
+			craft.addActor(craftCells[i]);
+		}
+		
 		Image drop = new Image(skin,"drop");
 		drop.setBounds(200, 0, 50, 200);
-		window.addActor(drop);
-		stage.addActor(window);
+		inventory.addActor(drop);
+		
+		stage.addActor(inventory);
+		stage.addActor(craft);
 	
 		for(int i = 0 ; i < 4 ; i++)
 			for(int j = 0 ; j < 4 ; j++)
 			{
 				targets[i][j] = new InventaryTarget(cells[i][j]);
-				dragAndDrop.addSource(new InventarySource(cells[i][j]));
 				dragAndDrop.addTarget(targets[i][j]);
 			}
 		
 		dragAndDrop.addTarget(new InventaryDrop(drop));
+		
+		for(int i = 0 ; i < 2 ; i++)
+		{
+			dragAndDrop.addTarget(new CraftTarget(craftCells[i]));
+		}
 		
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage);
@@ -178,7 +280,11 @@ public class SceneController implements InputProcessor {
 
 		if(keycode == Keys.I)
 		{
-			window.setVisible(!window.isVisible());
+			inventory.setVisible(!inventory.isVisible());
+		}
+		if(keycode == Keys.S)
+		{
+			craft.setVisible(!craft.isVisible());
 		}
 		
 		return false;

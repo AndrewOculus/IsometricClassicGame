@@ -32,6 +32,7 @@ public class Character extends Actor implements Comparable<Actor> {
 		charAnimationInit();
 		setX(x);
 		setY(y);
+		camera.position.set(getX(), getY(), 0);
 	}
 
 	@Override

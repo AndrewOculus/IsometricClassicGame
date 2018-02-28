@@ -14,11 +14,13 @@ public class Stuff extends Actor implements Comparable<Actor> {
 	private Sprite stuffSprite;
 	private float size;
 	private final float sceneSize = 20 , invSize = 50;
+	private StuffType type;
 	
 	public Stuff(float x , float y , StuffType type, DragAndDrop dragAndDrop) {
 		super.setX(x);
 		super.setY(y);
 		setSceneSize();
+		this.type = type;
 		stuffSprite = new Sprite(RenderKit.getStuff(type));
 		stuffSprite.setSize(size, size);
 		stuffSprite.setOrigin(-size/2,-size/2);
@@ -53,6 +55,10 @@ public class Stuff extends Actor implements Comparable<Actor> {
 	public void setSceneSize()
 	{
 		this.size = sceneSize;
+	}
+	public StuffType getType()
+	{
+		return type;
 	}
 	public void setInvSize()
 	{
