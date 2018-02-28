@@ -113,6 +113,11 @@ public class Character extends Actor implements Comparable<Actor> {
 		currentRegion = (TextureRegion) animations[0].getKeyFrame(2);
 	}
 
+	public CharacterStats getStats()
+	{
+		return characterStats;
+	}
+	
 	@Override
 	public int compareTo(Actor o) {
 		return (int) (-getY() + o.getY());

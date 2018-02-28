@@ -47,11 +47,15 @@ public class PointOfEntry extends Game {
 	    		stage.addActor(new Tree(i*200 + random.nextFloat()*100, j*200 + random.nextFloat()*100 ,TreeType.randomTree()));
 	    	}
 	    DragAndDrop dragAndDrop = new DragAndDrop();
-		stage.addActor(new Stuff(2301, 0 ,StuffType.randomStuff(), dragAndDrop));
+		stage.addActor(new Stuff(2301, 0 ,StuffType.stick, dragAndDrop));
+		stage.addActor(new Stuff(2310, 0 ,StuffType.rope, dragAndDrop));
+		stage.addActor(new Stuff(2310, 0 ,StuffType.stick, dragAndDrop));
+		stage.addActor(new Stuff(2310, 0 ,StuffType.stone, dragAndDrop));
 		stage.addActor(new Stuff(2310, 0 ,StuffType.randomStuff(), dragAndDrop));
 		stage.addActor(new Stuff(2310, 0 ,StuffType.randomStuff(), dragAndDrop));
 		stage.addActor(new Stuff(2310, 0 ,StuffType.randomStuff(), dragAndDrop));
 		stage.addActor(new Stuff(2310, 0 ,StuffType.randomStuff(), dragAndDrop));
+
 
 		sceneController = new SceneController(stage,skin,character, dragAndDrop);
 	}
